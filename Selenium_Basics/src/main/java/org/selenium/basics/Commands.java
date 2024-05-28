@@ -1,5 +1,7 @@
 package org.selenium.basics;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -11,7 +13,105 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 public class Commands
-{
+{	
+	public void verifyDynamicWebTables()
+	{
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://money.rediff.com/indices");
+		driver.manage().window().maximize();
+		
+		WebElement showMore=driver.findElement(By.xpath("//a[@id='showMoreLess']"));
+		showMore.click();
+		
+		WebElement webTable=driver.findElement(By.xpath("//table[@id='dataTable']//tbody"));
+		
+		List<WebElement> rows=webTable.findElements(By.tagName("tr"));
+		int rowsize=rows.size();
+		int i, j;
+		for(i=0;i<rowsize;i++)
+		{
+			List<WebElement> coloumn=rows.get(i).findElements(By.tagName("td"));
+			int coloumnsize=coloumn.size();
+			
+			for(j=0;j<coloumnsize;j++)
+			{
+				String celltext=coloumn.get(j).getText();
+				if(celltext.equals("S&P BSE 200"))
+				{
+					System.out.println("Previous close value: "+coloumn.get(1).getText());
+				}
+			}
+		}
+		WebElement table=driver.findElement(By.xpath("//table[@id ='dataTable']//tbody//tr[2]")); 
+		System.out.println(table.getText()); 
+		WebElement tablecolumn=driver.findElement(By.xpath("//table[@id ='dataTable']//tbody//td[2]")); 
+		System.out.println(" value in colum "+tablecolumn.getText()); 
+	}
+	
+	public void verifymultiplewindowhandling()
+	{
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://demo.guru99.com/popup.php");
+		driver.manage().window().maximize();
+		
+		String parentwindowhandle_id=driver.getWindowHandle();
+		System.out.println(parentwindowhandle_id);
+		
+		WebElement clickhere_button=driver.findElement(By.xpath("//a[text()='Click Here']"));
+		clickhere_button.click();
+		
+		Set<String> windowhandle_ids=driver.getWindowHandles();
+		System.out.println(windowhandle_ids);
+		
+		Iterator<String> it=windowhandle_ids.iterator();
+		while(it.hasNext())
+		{
+			String childhandleid=it.next();
+			
+			if(!childhandleid.equals(parentwindowhandle_id))
+			{
+				driver.switchTo().window(childhandleid);
+				WebElement email=driver.findElement(By.xpath("//input[@name='emailid']"));
+				email.sendKeys("giaanup08@gmail.com");
+				WebElement submit=driver.findElement(By.xpath("//input[@name='btnLogin']"));
+				submit.click();
+				
+			}
+		}
+		driver.quit();
+		
+	}
+	public void verifyframes()
+	{
+			   WebDriver driver = new ChromeDriver();
+			   driver.get("https://demoqa.com/frames");
+			   driver.manage().window().maximize();
+			   List<WebElement> nooframes= driver.findElements(By.tagName("iframe"));
+			   int  tags = nooframes.size();
+			   System.out.println(" no of tags "+tags );
+			   //driver.switchTo().frame(1);
+			   //driver.switchTo().frame("frame1");
+			   WebElement Frame1 = driver.findElement(By.cssSelector("#frame1"));
+			   driver.switchTo().frame(Frame1);
+			   WebElement textofframes= driver.findElement(By.id("sampleHeading"));
+			   String text =textofframes.getText();
+			   System.out.println(" text out is "+text);
+	}
+	
+	public void verifyfileupload()
+	{
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://demo.guru99.com/test/upload/");
+		driver.manage().window().maximize();
+		
+		WebElement choose_file=driver.findElement(By.xpath("//input[@id='uploadfile_0']"));
+		choose_file.sendKeys("C:\\Users\\anups\\git\\Selenium_Basics\\Selenium_Basics\\src\\main\\resources\\MakeMyTrip.docx");
+		WebElement terms=driver.findElement(By.xpath("//input[@id='terms']"));
+		terms.click();
+		WebElement submit=driver.findElement(By.xpath("//button[@id='submitbutton']"));
+		submit.click();
+;
+	}
 	public void verifymousehover()
 	{
 		WebDriver driver=new ChromeDriver();
@@ -40,6 +140,7 @@ public class Commands
 		action.dragAndDropBy(dragme, 50, 55).build().perform();
 		driver.close();
 	}
+	
 	public void verifydraganddrop()
 	{
 		WebDriver driver=new ChromeDriver();
@@ -333,7 +434,7 @@ public class Commands
 	public static void main(String[] args) 
 	{
 		Commands cmdobj=new Commands();
-		cmdobj.verifymousehover();
+		cmdobj.verifyDynamicWebTables();
 		
 		
 	}
