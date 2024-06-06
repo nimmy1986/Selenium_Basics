@@ -3,13 +3,18 @@ package org.TestNgCommands;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.time.Duration;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.idealized.Javascript;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.openqa.selenium.JavascriptExecutor;
@@ -17,6 +22,40 @@ import org.openqa.selenium.JavascriptExecutor;
 
 public class Commands extends BrowserLaunch
 {
+	@Test
+	public void verifyfluentwait()
+	{
+		driver.get("https://demoqa.com/alerts");
+		JavascriptExecutor js=(JavascriptExecutor)driver;
+		js.executeScript("window.scrollTo(0,document.body.scrollHeight)");
+		FluentWait wait=new FluentWait(driver);
+		wait.withTimeout(Duration.ofSeconds(20));
+		wait.pollingEvery(Duration.ofSeconds(3));
+		wait.ignoring(NoSuchElementException.class);
+		
+		WebElement clickme=driver.findElement(By.id("timerAlertButton"));
+		clickme.click();
+		wait.until(ExpectedConditions.alertIsPresent());
+		
+		Alert alert=driver.switchTo().alert();
+		alert.accept();
+		
+	}
+	
+	public void verifyWait()
+
+	{
+
+	driver.get("https://demoqa.com/alerts");
+	driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+	//WebDriverWait wait =new WebDriverWait(driver,Duration.ofSeconds(20));
+	//wait.until( ExpectedConditions.visibilityOfElementLocated(By.id("timerAlertButton")));
+	WebElement clickme = driver.findElement(By.id("timerAlertButton"));
+	clickme.click();
+	//wait.until(ExpectedConditions.alertIsPresent());
+	Alert alert =driver.switchTo().alert();
+	alert.accept();
+	}
 	@Test
 	public void verifykeyboardevents() throws AWTException
 	{
@@ -91,12 +130,13 @@ public class Commands extends BrowserLaunch
 		Assert.assertTrue(isvotedisplayed, "Vote button is not displayed");
 	}
 	@Test
+	
 	public void demotitle()
 	{
 		driver.get("https://demowebshop.tricentis.com/");
 		String actualtitle=driver.getTitle();
 		System.out.println("Title of the webpage is "+actualtitle);
-		String expectedtitle="Demo Web Shop";
+		String expectedtitle="Demo Web hop";
 		Assert.assertEquals(actualtitle, expectedtitle, "Invalid Title");
 		
 		WebElement login=driver.findElement(By.xpath("//a[@class='ico-login']"));
@@ -114,7 +154,7 @@ public class Commands extends BrowserLaunch
 		WebElement userid=driver.findElement(By.xpath("//a[text()='nimmyanup26@gmail.com']"));
 		String useridontop=userid.getText();
 		
-		String expecteduseridontop="nimmyanup26@gmail.com";
+		String expecteduseridontop="nimmyanp26@gmail.com";
 		Assert.assertEquals(useridontop, expecteduseridontop,"Invalid Email id");
 	}
 		

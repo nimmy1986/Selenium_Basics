@@ -434,7 +434,7 @@ public class Commands
 	public static void main(String[] args) 
 	{
 		Commands cmdobj=new Commands();
-		cmdobj.verifyDynamicWebTables();
+		cmdobj.verifydemowebshopRegister();
 		
 		
 	}

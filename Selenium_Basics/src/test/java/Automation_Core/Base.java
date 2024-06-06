@@ -1,4 +1,4 @@
-package org.TestNgCommands;
+package Automation_Core;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,6 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -16,14 +15,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.internal.annotations.ITest;
 
-public class BrowserLaunch 
+public class Base 
 {
-	WebDriver driver;
+	public WebDriver driver;
 	public void initialisebrowserlaunch(String browser)
 	{
 		if(browser.equals("Chrome"))
 		{
-			driver=new ChromeDriver();
+			driver=new ChromeDriver();					
 		}
 		else if(browser.equals("Edge"))
 		{
@@ -51,14 +50,13 @@ public class BrowserLaunch
 		{
 			takeScreenShot(result);
 		}
-		driver.close();
-		
+		//driver.close();
 	}
 	
 	public void takeScreenShot(ITestResult result) throws IOException
 	{
 		TakesScreenshot takesscreenshot = (TakesScreenshot)driver;
 		File screenshot = takesscreenshot.getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(screenshot, new File("./ScreenShot/"+result.getName()+".png"));	
+		FileUtils.copyFile(screenshot, new File("./ScreenShot/"+result.getName()+".png"));
 	}
 }
