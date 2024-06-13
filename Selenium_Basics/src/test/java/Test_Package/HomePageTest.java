@@ -1,7 +1,6 @@
 package Test_Package;
 
-import static org.testng.Assert.assertEquals;
-
+import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -10,29 +9,38 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import Automation_Core.Base;
+import Utilities.ExcelUtility;
 
 public class HomePageTest extends Base
 {
 	@Test
-	public void verfyhomepagetitle()
+	public void verifyhomepagetitle() throws IOException
 	{
-	driver.get("https://demowebshop.tricentis.com/");
-	String Title=driver.getTitle();
-	String expectedTitle="Demo eb Shop";
-	Assert.assertEquals(Title, expectedTitle,"Home page title is not as expected");
+		try
+		{
+			driver.get("https://demowebshop.tricentis.com/");
+			String Title=driver.getTitle();
+			String expectedTitle=ExcelUtility.readStringData(0,0,"Homepage");
+			Assert.assertEquals(Title, expectedTitle,"Home page title is not as expected");
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException("Title is not same");
+		}
 	}
 	@Test
-	public void verifyCommunityPoll() 
+	public void verifyCommunityPoll() throws IOException 
 	{
-	
+	try
+	{
 		driver.get("https://demowebshop.tricentis.com/");
 	    List<WebElement> communityPollOptions = driver.findElements(By.xpath("//li[@class='answer']//input[@type='radio']//following-sibling::label"));
 	    for(WebElement radiobutton : communityPollOptions)
 	    {
 	    	 String radiobuttontext = radiobutton.getText();
 	         System.out.println("Option: " +radiobuttontext);
-	         
-	         if (radiobuttontext.equalsIgnoreCase("Good")) 
+	         String optionselected=ExcelUtility.readStringData(1,0,"Homepage");
+	         if (radiobuttontext.equals(optionselected)) 
 	         {
 	        	 radiobutton.click();
 	         }
@@ -41,6 +49,11 @@ public class HomePageTest extends Base
  		boolean isradiogoodselected=radiogood.isSelected();
 
  		Assert.assertTrue(isradiogoodselected, "Good is not selected");
+	}
+	catch(Exception e)
+	{
+		throw new RuntimeException("Mentioned option is not selected");
+	}
  		
 	}
 }

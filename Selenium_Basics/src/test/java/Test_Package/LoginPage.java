@@ -6,6 +6,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import Automation_Core.Base;
+import Utilities.ExcelUtility;
+import dataprovider.dataproviders;
 
 public class LoginPage extends Base
 {
@@ -14,7 +16,7 @@ public class LoginPage extends Base
 	{
 		driver.get("https://demowebshop.tricentis.com/login");
 		String title=driver.getTitle();
-		String expectedtitle="Demo Web Shop Login";
+		String expectedtitle=ExcelUtility.readStringData(0 ,0,"Loginpage");
 		Assert.assertEquals(title, expectedtitle," Loginpage tile is not as expectedtitle");
 	}
 	@Test
@@ -22,7 +24,7 @@ public class LoginPage extends Base
 	{
 		driver.get("https://demowebshop.tricentis.com/login");
 		WebElement email=driver.findElement(By.xpath("//input[@id='Email']"));
-		email.sendKeys("nimmyanup26@gmail.com");
+		ExcelUtility.readStringData(0,0,"Loginpage");
 		
 		WebElement password=driver.findElement(By.xpath("//input[@id='Password']"));
 		password.sendKeys("pwd1234");
@@ -37,21 +39,23 @@ public class LoginPage extends Base
 		Assert.assertEquals(userid_top, expecteduseridontop,"User is not logged in");
 		
 	}
-	@Test
-	public void verifyinvaliduserlogin()
+	@Test(dataProvider="InvalidUserCredentials", dataProviderClass=dataproviders.class)
+	public void verifyinvaliduserlogin(String usrnm,String pwd)
 	{
 		driver.get("https://demowebshop.tricentis.com/login");
 		WebElement email=driver.findElement(By.xpath("//input[@id='Email']"));
-		email.sendKeys("nimmyanup26@gmail.com");
+		email.sendKeys(usrnm);
 		
 		WebElement password=driver.findElement(By.xpath("//input[@id='Password']"));
-		password.sendKeys("pd1234");
+		password.sendKeys(pwd);
 		
 		WebElement loginbutton=driver.findElement(By.xpath("//input[@class='button-1 login-button']"));
 		loginbutton.click();
 		
-		WebElement invalidcredentialstext=driver.findElement(By.xpath("//div[@class='validation-summary-errors']"));
-		String erromessage=invalidcredentialstext.getText();
-		System.out.println(erromessage);
+		WebElement invalidcredentialstext=driver.findElement(By.xpath("//span[text()='Login was unsuccessful. Please correct the errors and try again.']"));
+		String actualerromessage=invalidcredentialstext.getText();
+		System.out.println(actualerromessage);
+		String expectederrormessage=ExcelUtility.readIntegerData(1, 0,"Loginpage");
+		Assert.assertEquals(actualerromessage, expectederrormessage, "Incorrect Error message");
 	}
 }
