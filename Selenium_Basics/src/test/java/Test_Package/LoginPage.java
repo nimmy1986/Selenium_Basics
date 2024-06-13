@@ -8,14 +8,16 @@ import org.testng.annotations.Test;
 import Automation_Core.Base;
 import Utilities.ExcelUtility;
 import dataprovider.dataproviders;
+import listeners.RetryAnalyzer;
 
 public class LoginPage extends Base
 {
-	@Test
+	@Test(retryAnalyzer=RetryAnalyzer.class)
 	public void loginpagetitle()
 	{
 		driver.get("https://demowebshop.tricentis.com/login");
 		String title=driver.getTitle();
+		System.out.println(title);
 		String expectedtitle=ExcelUtility.readStringData(0 ,0,"Loginpage");
 		Assert.assertEquals(title, expectedtitle," Loginpage tile is not as expectedtitle");
 	}
@@ -24,10 +26,11 @@ public class LoginPage extends Base
 	{
 		driver.get("https://demowebshop.tricentis.com/login");
 		WebElement email=driver.findElement(By.xpath("//input[@id='Email']"));
-		ExcelUtility.readStringData(0,0,"Loginpage");
-		
+		String emailid=ExcelUtility.readStringData(1,0,"Loginpage");
+		email.sendKeys(emailid);
 		WebElement password=driver.findElement(By.xpath("//input[@id='Password']"));
-		password.sendKeys("pwd1234");
+		String pwd=ExcelUtility.readStringData(2,0,"Loginpage");
+		password.sendKeys(pwd);
 		
 		WebElement loginbutton=driver.findElement(By.xpath("//input[@class='button-1 login-button']"));
 		loginbutton.click();
@@ -55,7 +58,7 @@ public class LoginPage extends Base
 		WebElement invalidcredentialstext=driver.findElement(By.xpath("//span[text()='Login was unsuccessful. Please correct the errors and try again.']"));
 		String actualerromessage=invalidcredentialstext.getText();
 		System.out.println(actualerromessage);
-		String expectederrormessage=ExcelUtility.readIntegerData(1, 0,"Loginpage");
+		String expectederrormessage=ExcelUtility.readIntegerData(3, 0,"Loginpage");
 		Assert.assertEquals(actualerromessage, expectederrormessage, "Incorrect Error message");
 	}
 }
