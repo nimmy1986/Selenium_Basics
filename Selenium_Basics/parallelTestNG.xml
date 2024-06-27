@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Functional Suite">
+	<test name="RegistrationPageTest">
+		<parameter name="Browser" value="Chrome"></parameter>
+    	<classes>
+      		<class name="Test_Package.RegistrationPageTest">
+				  <methods>
+					  <include name="verifyregistrationpagetitle"/>
+					  <exclude name="verifyuserregistration"/>
+				  </methods>
+			</class>
+    	</classes>
+    </test>
+    <test name="LoginPage">
+		<parameter name="Browser" value="Edge"></parameter>
+    	<classes>
+      		<class name="Test_Package.LoginPage">
+			</class>
+    	</classes>
+    </test>
+       <test name="HomePageTest">
+		<parameter name="Browser" value="Firefox"></parameter>
+    	<classes>
+      		<class name="Test_Package.HomePageTest">
+			</class>
+    	</classes>
+    </test>
+</suite> <!-- Functional Suite -->
