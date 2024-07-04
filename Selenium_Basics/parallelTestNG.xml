@@ -13,14 +13,14 @@
     	</classes>
     </test>
     <test name="LoginPage">
-		<parameter name="Browser" value="Edge"></parameter>
+		<parameter name="Browser" value="Chrome"></parameter>
     	<classes>
       		<class name="Test_Package.LoginPage">
 			</class>
     	</classes>
     </test>
        <test name="HomePageTest">
-		<parameter name="Browser" value="Firefox"></parameter>
+		<parameter name="Browser" value="Chrome"></parameter>
     	<classes>
       		<class name="Test_Package.HomePageTest">
 			</class>
